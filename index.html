@@ -104,7 +104,7 @@ body {
 /* ══════════════════════════════════════════════════════════
    NAV
 ══════════════════════════════════════════════════════════ */
-nav {
+#nav {
   position: fixed; inset-x: 0; top: 0; z-index: 1000;
   display: flex; align-items: center; justify-content: space-between;
   padding: 1rem 2rem;
@@ -112,11 +112,11 @@ nav {
   border-bottom: 1px solid transparent;
   transition: background .4s, border-bottom .4s;
 }
-nav.scrolled {
+#nav.scrolled {
   background: rgba(8,16,30,0.98);
   border-bottom: 1px solid var(--border);
 }
-[data-theme="light"] nav.scrolled { background: rgba(244,246,251,.95); }
+[data-theme="light"] #nav.scrolled { background: rgba(244,246,251,.95); }
 
 .nav-logo {
   font-family: var(--display); font-size: 1.4rem; letter-spacing: .04em;
@@ -803,7 +803,7 @@ footer {
   .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
   .metrics-row { grid-template-columns: 1fr 1fr; }
   .projects-grid { grid-template-columns: 1fr; }
-  nav { flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding: 1rem 1.2rem; }
+  #nav { flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding: 1rem 1.2rem; }
   .nav-links { 
     width: 100%; margin: 0;
     overflow-x: auto; padding-bottom: 5px;
@@ -820,7 +820,7 @@ footer {
   .metrics-row { grid-template-columns: 1fr; }
   .exp-card { padding: 1.6rem 1.2rem; }
   .proj-card { padding: 1.4rem 1.2rem; }
-  nav { padding: .85rem 1.2rem; }
+  #nav { padding: .85rem 1.2rem; }
   footer { padding: 3rem 1.2rem 1.5rem; }
   .ach-grid { grid-template-columns: 1fr; }
   .contact-form { padding: 1.6rem 1.2rem; }
@@ -835,21 +835,6 @@ footer {
   </style>
 </head>
 <body>
-
-  <!-- LOADER -->
-  <div id="loader">
-    <div class="loader-inner">
-      <div class="loader-name">LIASH ROY</div>
-      <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
-    </div>
-  </div>
-
-  <!-- PROGRESS -->
-  <div id="progress-bar"></div>
-
-  <!-- CURSOR -->
-  <div class="cursor-dot" id="cDot"></div>
-  <div class="cursor-ring" id="cRing"></div>
 
   <!-- ═══ NAV ════════════════════════════════════════════════ -->
   <nav id="nav">
@@ -867,6 +852,21 @@ footer {
       <a class="nav-cta" href="#contact">Contact</a>
     </div>
   </nav>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-name">LIASH ROY</div>
+      <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div id="progress-bar"></div>
+
+  <!-- CURSOR -->
+  <div class="cursor-dot" id="cDot"></div>
+  <div class="cursor-ring" id="cRing"></div>
 
   <!-- ═══ HERO ════════════════════════════════════════════════ -->
   <section id="hero">
@@ -1556,3 +1556,22 @@ document.querySelectorAll(hoverEls).forEach(el => {
 </script>
 </body>
 </html>
+
+/* -- Nav scroll / active ----------------------------------- */
+const navEl = document.getElementById('nav');
+const sections = document.querySelectorAll('section[id]');
+const navAnchors = document.querySelectorAll('.nav-links a[data-section]');
+
+window.addEventListener('scroll', () => {
+  navEl.classList.toggle('scrolled', window.scrollY > 50);
+
+  // Active nav link tracking
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navAnchors.forEach(a => {
+    a.classList.toggle('active', a.dataset.section === current);
+  });
+}, { passive: true });
+
