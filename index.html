@@ -104,7 +104,7 @@ body {
 /* ══════════════════════════════════════════════════════════
    NAV
 ══════════════════════════════════════════════════════════ */
-#nav {
+nav {
   position: fixed; inset-x: 0; top: 0; z-index: 1000;
   display: flex; align-items: center; justify-content: space-between;
   padding: 1rem 2rem;
@@ -112,11 +112,11 @@ body {
   border-bottom: 1px solid transparent;
   transition: background .4s, border-bottom .4s;
 }
-#nav.scrolled {
+nav.scrolled {
   background: rgba(8,16,30,0.98);
   border-bottom: 1px solid var(--border);
 }
-[data-theme="light"] #nav.scrolled { background: rgba(244,246,251,.95); }
+[data-theme="light"] nav.scrolled { background: rgba(244,246,251,.95); }
 
 .nav-logo {
   font-family: var(--display); font-size: 1.4rem; letter-spacing: .04em;
@@ -163,9 +163,6 @@ body {
 .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(20,117,225,.45); }
 
 /* No burger, no mobile menu. Simple navigation. */
-.mobile-menu { display: none !important; visibility: hidden !important; opacity: 0 !important; }
-.burger { display: none !important; }
-#mMenu { display: none !important; }
 
 /* ══════════════════════════════════════════════════════════
    SHARED UTILITIES
@@ -806,8 +803,7 @@ footer {
   .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
   .metrics-row { grid-template-columns: 1fr 1fr; }
   .projects-grid { grid-template-columns: 1fr; }
-  .contact-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-  #nav { flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding: 1rem 1.2rem; }
+  nav { flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding: 1rem 1.2rem; }
   .nav-links { 
     width: 100%; margin: 0;
     overflow-x: auto; padding-bottom: 5px;
@@ -824,7 +820,7 @@ footer {
   .metrics-row { grid-template-columns: 1fr; }
   .exp-card { padding: 1.6rem 1.2rem; }
   .proj-card { padding: 1.4rem 1.2rem; }
-  #nav { padding: .85rem 1.2rem; }
+  nav { padding: .85rem 1.2rem; }
   footer { padding: 3rem 1.2rem 1.5rem; }
   .ach-grid { grid-template-columns: 1fr; }
   .contact-form { padding: 1.6rem 1.2rem; }
@@ -855,7 +851,23 @@ footer {
   <div class="cursor-dot" id="cDot"></div>
   <div class="cursor-ring" id="cRing"></div>
 
-  <!-- TOP BAR REMOVED -->
+  <!-- ═══ NAV ════════════════════════════════════════════════ -->
+  <nav id="nav">
+    <a class="nav-logo" href="#hero">LR<span>.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about"       data-section="about">About</a></li>
+      <li><a href="#experience"  data-section="experience">Experience</a></li>
+      <li><a href="#projects"    data-section="projects">Projects</a></li>
+      <li><a href="#skills"      data-section="skills">Skills</a></li>
+      <li><a href="#education"   data-section="education">Education</a></li>
+      <li><a href="#achievements"data-section="achievements">Achievements</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark">🌙</button>
+      <a class="nav-cta" href="#contact">Contact</a>
+    </div>
+  </nav>
+
   <!-- ═══ HERO ════════════════════════════════════════════════ -->
   <section id="hero">
     <div class="hero-orb" aria-hidden="true"></div>
@@ -1422,7 +1434,23 @@ window.addEventListener('scroll', () => {
   pBar.style.width = (window.scrollY / (document.body.scrollHeight - innerHeight) * 100) + '%';
 }, { passive: true });
 
-/* ── Nav JS Removed ── */
+/* ── Nav scroll / active ─────────────────────────────────── */
+const navEl = document.getElementById('nav');
+const sections = document.querySelectorAll('section[id]');
+const navAnchors = document.querySelectorAll('.nav-links a[data-section]');
+
+window.addEventListener('scroll', () => {
+  navEl.classList.toggle('scrolled', window.scrollY > 50);
+
+  // Active nav link tracking
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navAnchors.forEach(a => {
+    a.classList.toggle('active', a.dataset.section === current);
+  });
+}, { passive: true });
 
 /* ── Theme toggle ────────────────────────────────────────── */
 const themeBtn = document.getElementById('themeToggle');
