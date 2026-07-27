@@ -854,23 +854,7 @@ footer {
   <div class="cursor-dot" id="cDot"></div>
   <div class="cursor-ring" id="cRing"></div>
 
-  <!-- ═══ NAV ════════════════════════════════════════════════ -->
-  <nav id="nav">
-    <a class="nav-logo" href="#hero">LR<span>.</span></a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about"       data-section="about">About</a></li>
-      <li><a href="#experience"  data-section="experience">Experience</a></li>
-      <li><a href="#projects"    data-section="projects">Projects</a></li>
-      <li><a href="#skills"      data-section="skills">Skills</a></li>
-      <li><a href="#education"   data-section="education">Education</a></li>
-      <li><a href="#achievements"data-section="achievements">Achievements</a></li>
-    </ul>
-    <div class="nav-right">
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark">🌙</button>
-      <a class="nav-cta" href="#contact">Contact</a>
-    </div>
-  </nav>
-
+  <!-- TOP BAR REMOVED -->
   <!-- ═══ HERO ════════════════════════════════════════════════ -->
   <section id="hero">
     <div class="hero-orb" aria-hidden="true"></div>
@@ -1437,23 +1421,7 @@ window.addEventListener('scroll', () => {
   pBar.style.width = (window.scrollY / (document.body.scrollHeight - innerHeight) * 100) + '%';
 }, { passive: true });
 
-/* ── Nav scroll / active ─────────────────────────────────── */
-const navEl = document.getElementById('nav');
-const sections = document.querySelectorAll('section[id]');
-const navAnchors = document.querySelectorAll('.nav-links a[data-section]');
-
-window.addEventListener('scroll', () => {
-  navEl.classList.toggle('scrolled', window.scrollY > 50);
-
-  // Active nav link tracking
-  let current = '';
-  sections.forEach(s => {
-    if (window.scrollY >= s.offsetTop - 120) current = s.id;
-  });
-  navAnchors.forEach(a => {
-    a.classList.toggle('active', a.dataset.section === current);
-  });
-}, { passive: true });
+/* ── Nav JS Removed ── */
 
 /* ── Theme toggle ────────────────────────────────────────── */
 const themeBtn = document.getElementById('themeToggle');
