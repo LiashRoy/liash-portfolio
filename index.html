@@ -107,7 +107,7 @@ body {
 nav {
   position: fixed; inset-x: 0; top: 0; z-index: 1000;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 1rem 2rem;
+  padding: 1rem 2rem; overflow: hidden;
   transition: background .4s, backdrop-filter .4s, border-bottom .4s;
 }
 nav.scrolled {
@@ -1544,25 +1544,41 @@ window.addEventListener('scroll', () => {
 const html = document.documentElement;
 const themeBtn = document.getElementById('themeToggle');
 let isDark = true;
-themeBtn.addEventListener('click', () => {
-  isDark = !isDark;
-  html.setAttribute('data-theme', isDark ? 'dark' : 'light');
-  themeBtn.textContent = isDark ? '🌙' : '☀️';
-});
+if (themeBtn) {
+  themeBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    isDark = !isDark;
+    html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    themeBtn.textContent = isDark ? '🌙' : '☀️';
+  });
+}
 
 /* ── Burger / mobile menu ────────────────────────────────── */
 const burger = document.getElementById('burgerBtn');
 const mMenu  = document.getElementById('mMenu');
-burger.addEventListener('click', () => {
-  const open = mMenu.classList.toggle('open');
-  burger.classList.toggle('open', open);
-  document.body.style.overflow = open ? 'hidden' : '';
-});
-mMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-  mMenu.classList.remove('open');
-  burger.classList.remove('open');
-  document.body.style.overflow = '';
-}));
+
+// Nuclear option: physically remove mobile menu from DOM on desktop to prevent any phantom rendering
+function handleResize() {
+  if (window.innerWidth > 900) {
+    if (mMenu && mMenu.parentNode) mMenu.style.display = 'none';
+  }
+}
+window.addEventListener('resize', handleResize);
+handleResize();
+
+if (burger && mMenu) {
+  burger.addEventListener('click', () => {
+    const open = mMenu.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  mMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mMenu.classList.remove('open');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+  }));
+}
 
 /* ── Intersection reveal ─────────────────────────────────── */
 const io = new IntersectionObserver(entries => {
